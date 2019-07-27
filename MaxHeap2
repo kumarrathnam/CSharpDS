@@ -1,13 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+public class MaxHeapComparer : Comparer<Tuple<int, int[]>> {
+    public override int Compare(Tuple<int, int[]> tup1, Tuple<int, int[]> tup2) {
+        return tup2.Item1 - tup1.Item1;
+    }
+}
 
-namespace Heap
-{
     /// <summary>
     /// Maximum Heap Data Structure.
     /// </summary>
-    public class BinaryMaxHeap<T> where T : IComparable<T>
+    public class Heap<T>
     {
         /// <summary>
         /// Instance Variables.
@@ -19,9 +19,9 @@ namespace Heap
         /// <summary>
         /// CONSTRUCTORS
         /// </summary>
-        public BinaryMaxHeap() : this(0, null) { }
-        public BinaryMaxHeap(Comparer<T> comparer) : this(0, comparer) { }
-        public BinaryMaxHeap(int capacity, Comparer<T> comparer)
+        public Heap() : this(0, null) { }
+        public Heap(Comparer<T> comparer) : this(0, comparer) { }
+        public Heap(int capacity, Comparer<T> comparer)
         {
             collection = new List<T>(capacity);
             heapComparer = comparer ?? Comparer<T>.Default;
@@ -187,7 +187,7 @@ namespace Heap
         /// <summary>
         /// Returns the node of maximum value from a max heap after removing it from the heap.
         /// </summary>
-        public T ExtractMax()
+        public T Extract()
         {
             var max = Peek();
             RemoveMax();
@@ -235,21 +235,21 @@ namespace Heap
         /// Union two heaps together, returns a new min-heap of both heaps' elements, 
         /// ... and then destroys the original ones.
         /// </summary>
-        public BinaryMaxHeap<T> Union(ref BinaryMaxHeap<T> firstMaxHeap, ref BinaryMaxHeap<T> secondMaxHeap)
+        public Heap<T> Union(ref Heap<T> firstMaxHeap, ref Heap<T> secondMaxHeap)
         {
             if (firstMaxHeap == null || secondMaxHeap == null)
                 throw new ArgumentNullException("Null heaps are not allowed.");
 
             // Create a new heap with reserved size.
             int size = firstMaxHeap.Count + secondMaxHeap.Count;
-            var newHeap = new BinaryMaxHeap<T>(size, Comparer<T>.Default);
+            var newHeap = new Heap<T>(size, Comparer<T>.Default);
 
             // Insert into the new heap.
             while (firstMaxHeap.IsEmpty == false)
-                newHeap.Add(firstMaxHeap.ExtractMax());
+                newHeap.Add(firstMaxHeap.Extract());
 
             while (secondMaxHeap.IsEmpty == false)
-                newHeap.Add(secondMaxHeap.ExtractMax());
+                newHeap.Add(secondMaxHeap.Extract());
 
             // Destroy the two heaps.
             firstMaxHeap = secondMaxHeap = null;
@@ -270,4 +270,3 @@ namespace Heap
             list[j] = temp;
         }
     }
-}

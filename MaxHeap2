@@ -1,6 +1,6 @@
 public class MaxHeapComparer : Comparer<Tuple<int, int[]>> {
     public override int Compare(Tuple<int, int[]> tup1, Tuple<int, int[]> tup2) {
-        return tup2.Item1 - tup1.Item1;
+        return tup1.Item1 - tup2.Item1;
     }
 }
 

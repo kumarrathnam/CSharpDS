@@ -1,0 +1,64 @@
+using System;
+using System.Linq;
+using System.Collections.Generic;
+					
+public class Program
+{
+	public static void Main()
+	{
+		Console.WriteLine("Hello World");
+		
+		var treeMap = new TreeMap <int, int>();
+		
+		treeMap.Add(1,2);
+		treeMap.Add(2,3);
+				treeMap.Add(2,4);
+		treeMap.Add(0,5);
+		
+		foreach (var result in treeMap.GetViewBetween(1,2)) {
+			Console.WriteLine(result);
+		}
+	}
+}
+
+public class TreeMap <KType, VType> {
+	
+	private Dictionary<KType, List<VType>> keyToValue;
+	private SortedSet<KType> keys;
+	
+	public TreeMap () {
+		this.keyToValue = new Dictionary<KType, List<VType>>();
+		this.keys = new SortedSet<KType>();
+	}
+	
+	public void Add (KType key, VType value) {
+		
+		if (!keyToValue.ContainsKey(key)) {
+			keyToValue[key] = new List<VType>();
+		}
+		
+		keyToValue[key].Add(value);
+		keys.Add(key);
+	}
+	
+	public List<VType> Get (KType key) {
+		
+		if (keyToValue.ContainsKey(key)) {
+			return keyToValue[key];
+		}
+		
+		return null;
+	}
+	
+	public List<VType> GetViewBetween (KType start, KType end) {
+		
+		var result = new List<VType>();
+		
+		foreach (var item in this.keys.GetViewBetween(start, end)) {
+			result.AddRange(this.keyToValue[item]);
+		}
+		
+		return result;
+	}
+	
+}
